@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
+﻿
 namespace ToDoList
 {
     public static class ConfigurationExtension

@@ -6,8 +6,10 @@ namespace ToDoList.ViewModels
 {
     public class IndexViewModel
     {
+        #region NewCategory
         [Required(ErrorMessage = "The category name is mandatory")]
         public string Name { get; set; }
+        #endregion
         #region NewTask
         [Required(ErrorMessage = "The task description is mandatory")]
         public string Description { get; set; }

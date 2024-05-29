@@ -3,29 +3,45 @@ using System.ComponentModel;
 
 namespace ToDoList.Factory
 {
-    public class RepositoryFactory(IServiceProvider serviceProvider) : IRepositoryFactory
+    public class RepositoryFactory : IRepositoryFactory
     {
-        private readonly IServiceProvider _serviceProvider = serviceProvider;
-        private StorageType _storageType = StorageType.SQL;
-        private IRepositoryFactory _factory = serviceProvider.GetRequiredService<SqlRepositoryFactory>();
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public RepositoryFactory(IServiceProvider serviceProvider, IHttpContextAccessor httpContextAccessor)
+        {
+            _serviceProvider = serviceProvider;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         public IRepository<T> GetRepository<T>()
         {
-            return _factory.GetRepository<T>();
-        }
-        public RepositoryFactory SetStorageType(StorageType storageType)
-        {
-            _storageType = storageType;
-            switch (_storageType)
+            var storageType = GetStorageType();
+            IRepositoryFactory factory = storageType switch
             {
-                case StorageType.SQL: _factory = _serviceProvider.GetRequiredService<SqlRepositoryFactory>(); break;
-                case StorageType.XML: _factory = _serviceProvider.GetRequiredService<XmlRepositoryFactory>(); break;
-                default: throw new InvalidEnumArgumentException(nameof(storageType));
-            }
-            return this;
+                StorageType.SQL => _serviceProvider.GetRequiredService<SqlRepositoryFactory>(),
+                StorageType.XML => _serviceProvider.GetRequiredService<XmlRepositoryFactory>(),
+                _ => throw new InvalidEnumArgumentException(nameof(storageType))
+            };
+            return factory.GetRepository<T>();
         }
+
         public StorageType GetStorageType()
         {
-            return _storageType;
+            var session = _httpContextAccessor.HttpContext.Session;
+            var storageType = session.GetString("StorageType");
+            return storageType switch
+            {
+                "SQL" => StorageType.SQL,
+                "XML" => StorageType.XML,
+                _ => StorageType.SQL
+            };
+        }
+
+        public void SetStorageType(StorageType storageType)
+        {
+            var session = _httpContextAccessor.HttpContext.Session;
+            session.SetString("StorageType", storageType.ToString());
         }
     }
     public enum StorageType

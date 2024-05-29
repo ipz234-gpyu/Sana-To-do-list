@@ -6,9 +6,9 @@ using ToDoList.ViewModels;
 
 namespace ToDoList.Controllers
 {
-    public class HomeController(RepositoryFactory repositoryResolver) : Controller
+    public class HomeController(RepositoryFactory repositoryFactory) : Controller
     {
-        private readonly RepositoryFactory _repositories = repositoryResolver;
+        private readonly RepositoryFactory _repositories = repositoryFactory;
         public async Task<IActionResult> Index()
         {
             var tasksRepository = _repositories.GetRepository<Tasks>();

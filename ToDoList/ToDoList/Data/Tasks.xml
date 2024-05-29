@@ -10,8 +10,15 @@
   <Tasks>
     <Id>6</Id>
     <Description>ПОЇСТИ</Description>
-    <Completed>false</Completed>
+    <Completed>true</Completed>
     <DeadLine xsi:nil="true" />
     <CategoryId xsi:nil="true" />
+  </Tasks>
+  <Tasks>
+    <Id>7</Id>
+    <Description>ПОЇСТИ</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId>3</CategoryId>
   </Tasks>
 </ArrayOfTasks>
