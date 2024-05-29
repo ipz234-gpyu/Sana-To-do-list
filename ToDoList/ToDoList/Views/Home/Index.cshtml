@@ -1,0 +1,123 @@
+﻿@using ToDoList.Factory
+@model ToDoList.ViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<main>
+    <article class="mt-5">
+        <h1 class="text-center">To Do List</h1>
+        <div class="mb-3 d-flex flex-column flex-xl-row align-items-center justify-content-around">
+            <div>
+                <h3>Current storage: <span style="font-weight:normal">@Model.StorageTypeSelected</span></h3>
+            </div>
+            <div class="d-flex align-items-center gap-5">
+                <h2>Repository change:</h2>
+                <form method="post" asp-action="ChangeStorageType">
+                    <select name="storageType" class="form-select" onchange="this.form.submit()">
+                        <option value="">Select a repository:</option>
+                        @foreach (var storageType in Enum.GetValues(typeof(StorageType)))
+                        {
+                            <option value="@storageType.ToString()">@storageType</option>
+                        }
+                    </select>
+                </form>
+            </div>
+        </div>
+    </article>
+    <article class="d-flex justify-content-around flex-column flex-sm-row">
+        <section class="mt-5 col-sm-5">
+            <h2>Add new task</h2>
+            <form asp-action="AddTask" method="post" class="mb-3">
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="Description">Description:</label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Deadline">Deadline:</label>
+                        <input asp-for="Deadline" type="date" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId">Category:</label>
+                        <select asp-for="CategoryId" name="CategoryId" class="form-select">
+                            <option value=""></option>
+                            @if (Model.Categories != null)
+                            {
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Add task</button>
+            </form>
+        </section>
+        <section class="mt-5 col-sm-5">
+            <h2>Add new category</h2>
+            <form asp-action="AddCategory" method="post" class="mb-3">
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="Name">Name Category:</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Add category</button>
+            </form>
+        </section>
+    </article>
+    <article class="mt-5">
+        <h2>Task List</h2>
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th>Completed</th>
+                    <th>Description</th>
+                    <th>DeadLine</th>
+                    <th>Category</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TasksList)
+                {
+                    <tr class="text-center align-middle" style="background-color: @(!item.Completed ? "" : "lightgray"); text-decoration: @(!item.Completed ? "" : "line-through");">
+                        <td>
+                            <form method="post" asp-action="UpdateTaskStatus">
+                                <input type="hidden" name="Id" value="@item.Id" />
+                                <input type="hidden" name="Description" value="@item.Description" />
+                                <input type="hidden" name="DeadLine" value="@item.DeadLine" />
+                                <input type="hidden" name="CategoryId" value="@item?.CategoryId" />
+                                <input asp-for="@item.Completed" type="checkbox" class="form-check-input" name="Completed" onchange="this.form.submit()" />
+                            </form>
+                        </td>
+                        <td>@item.Description</td>
+                        <td>@item.DeadLine?.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            @if (item.CategoryId != null)
+                            {
+                                var category = @Model.Categories?.FirstOrDefault(category => category.Id == item.CategoryId, null);
+                                <span>@category?.Name</span>
+                            }
+                        </td>
+                        <td>
+                            <form asp-action="RemoveTask" asp-route-id="@item.Id" method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </article>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
