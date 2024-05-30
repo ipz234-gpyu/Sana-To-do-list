@@ -3,29 +3,15 @@ using System.ComponentModel;
 
 namespace ToDoList.Factory
 {
-    public class RepositoryFactory : IRepositoryFactory
+    public class RepositoryFactory(IServiceProvider serviceProvider, IHttpContextAccessor httpContextAccessor) : IRepositoryFactory
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public RepositoryFactory(IServiceProvider serviceProvider, IHttpContextAccessor httpContextAccessor)
-        {
-            _serviceProvider = serviceProvider;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private IRepositoryFactory factory = serviceProvider.GetRequiredService<SqlRepositoryFactory>();
         public IRepository<T> GetRepository<T>()
         {
-            var storageType = GetStorageType();
-            IRepositoryFactory factory = storageType switch
-            {
-                StorageType.SQL => _serviceProvider.GetRequiredService<SqlRepositoryFactory>(),
-                StorageType.XML => _serviceProvider.GetRequiredService<XmlRepositoryFactory>(),
-                _ => throw new InvalidEnumArgumentException(nameof(storageType))
-            };
             return factory.GetRepository<T>();
         }
-
         public StorageType GetStorageType()
         {
             var session = _httpContextAccessor.HttpContext.Session;
@@ -37,9 +23,14 @@ namespace ToDoList.Factory
                 _ => StorageType.SQL
             };
         }
-
         public void SetStorageType(StorageType storageType)
         {
+            factory = storageType switch
+            {
+                StorageType.SQL => _serviceProvider.GetRequiredService<SqlRepositoryFactory>(),
+                StorageType.XML => _serviceProvider.GetRequiredService<XmlRepositoryFactory>(),
+                _ => throw new InvalidEnumArgumentException(nameof(storageType))
+            };
             var session = _httpContextAccessor.HttpContext.Session;
             session.SetString("StorageType", storageType.ToString());
         }
