@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using System.Xml.Serialization;
 using ToDoList.Models;
 
@@ -80,14 +78,15 @@ namespace ToDoList.Repository
             lock (_lock)
             {
                 XDocument document;
-                try
-                {
+                if (File.Exists($"{_filePath}ModelsId.xml"))
                     document = XDocument.Load($"{_filePath}ModelsId.xml");
-                }
-                catch
+                else
                 {
-                    document = CreateModelsId();
+                    document = new XDocument(
+                        new XElement("ModelsId", new XElement($"Next{_fileName}Id", "1")));
+                    document.Save($"{_filePath}ModelsId.xml");
                 }
+
                 XElement nextTaskIdElement = document.Root.Element($"Next{_fileName}Id");
                 if (nextTaskIdElement == null)
                     nextTaskIdElement = CreateIdField(document);
@@ -96,19 +95,6 @@ namespace ToDoList.Repository
                 nextTaskIdElement.Value = (nextTaskId + 1).ToString();
                 document.Save($"{_filePath}ModelsId.xml");
                 return nextTaskId;
-            }
-        }
-        private XDocument CreateModelsId()
-        {
-            lock (_lock)
-            {
-                XDocument doc = new XDocument(
-                    new XElement("ModelsId",
-                        new XElement($"Next{_fileName}Id", "1")
-                    )
-                );
-                doc.Save($"{_filePath}ModelsId.xml");
-                return doc;
             }
         }
         private XElement CreateIdField(XDocument doc)

@@ -12,4 +12,12 @@
     <Id>3</Id>
     <Name>Home</Name>
   </Category>
+  <Category>
+    <Id>4</Id>
+    <Name>Work</Name>
+  </Category>
+  <Category>
+    <Id>5</Id>
+    <Name>Garden</Name>
+  </Category>
 </ArrayOfCategory>
