@@ -30,9 +30,9 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateTaskStatus(Tasks task)
+        public async Task<IActionResult> UpdateTaskStatus(int Id)
         {
-            await _repositories.GetRepository<Tasks>().UpdateAsync(task);
+            await _repositories.GetRepositoryTasks().Completed(Id);
             return RedirectToAction("Index");
         }
         [HttpPost]

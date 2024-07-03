@@ -89,9 +89,6 @@
                         <td>
                             <form method="post" asp-action="UpdateTaskStatus">
                                 <input type="hidden" name="Id" value="@item.Id" />
-                                <input type="hidden" name="Description" value="@item.Description" />
-                                <input type="hidden" name="DeadLine" value="@item.DeadLine" />
-                                <input type="hidden" name="CategoryId" value="@item?.CategoryId" />
                                 <input asp-for="@item.Completed" type="checkbox" class="form-check-input" name="Completed" onchange="this.form.submit()" />
                             </form>
                         </td>

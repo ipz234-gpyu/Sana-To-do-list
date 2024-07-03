@@ -1,13 +1,17 @@
 ﻿using ToDoList.Repository;
 using System.ComponentModel;
+using ToDoList.Models;
+using ToDoList.Repository.RepositoryModel;
 
 namespace ToDoList.Factory
 {
-    public class RepositoryFactory(IServiceProvider serviceProvider, IHttpContextAccessor httpContextAccessor) : IRepositoryFactory
+    public class RepositoryFactory(IServiceProvider _serviceProvider, IHttpContextAccessor _httpContextAccessor) : IRepositoryFactory
     {
-        private readonly IServiceProvider _serviceProvider = serviceProvider;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private IRepositoryFactory factory = serviceProvider.GetRequiredService<SqlRepositoryFactory>();
+        private IRepositoryFactory factory = _serviceProvider.GetRequiredService<SqlRepositoryFactory>();
+        public RepositoryTasks GetRepositoryTasks()
+        {
+            return factory.GetRepositoryTasks();
+        }
         public IRepository<T> GetRepository<T>()
         {
             return factory.GetRepository<T>();

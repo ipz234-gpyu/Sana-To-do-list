@@ -1,13 +1,18 @@
-﻿using ToDoList.Repository;
+﻿using ToDoList.Models;
+using ToDoList.Repository;
+using ToDoList.Repository.RepositoryModel;
 
 namespace ToDoList.Factory
 {
     public class SqlRepositoryFactory(IServiceProvider serviceProvider) : IRepositoryFactory
     {
-        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        public RepositoryTasks GetRepositoryTasks()
+        {
+            return serviceProvider.GetRequiredService<DapperRepositoryTasks>();
+        }
         public IRepository<T> GetRepository<T>()
         {
-            return _serviceProvider.GetRequiredService<DapperRepository<T>>();
+            return serviceProvider.GetRequiredService<DapperRepository<T>>();
         }
     }
 }

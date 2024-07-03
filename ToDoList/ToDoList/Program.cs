@@ -1,6 +1,7 @@
 using ToDoList.Factory;
 using ToDoList.Repository;
 using ToDoList.Models;
+using ToDoList.Repository.RepositoryModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,9 @@ builder.Services.AddSession(options =>
 
 // Add tasks repositories
 builder.Services
+    .AddSingleton<DapperRepositoryTasks>()
     .AddSingleton<DapperRepository<Tasks>>()
+    .AddSingleton<XmlRepositoryTasks>()
     .AddSingleton<XmlRepository<Tasks>>();
 
 // Add categories repositories
