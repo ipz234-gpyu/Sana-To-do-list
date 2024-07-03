@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Threading.Tasks;
+using ToDoList.Models;
 
 namespace ToDoList.Repository
 {
@@ -35,13 +37,14 @@ namespace ToDoList.Repository
             var columns = string.Join(", ", properties.Select(p => p.Name));
             var parameters = string.Join(", ", properties.Select(p => "@" + p.Name));
 
-            var sql = $"INSERT INTO {_tableName} ({columns}) VALUES ({parameters})";
+            var sql = $"INSERT INTO {_tableName} ({columns}) OUTPUT INSERTED.Id VALUES ({parameters})";
 
             var parameterValues = new DynamicParameters();
             foreach (var property in properties)
                 parameterValues.Add("@" + property.Name, property.GetValue(entity));
-            
-            await connection.ExecuteAsync(sql, parameterValues);
+
+            if (entity is IModelWithId ent)
+                ent.Id = await connection.ExecuteScalarAsync<int>(sql, parameterValues);
         }
         public async Task UpdateAsync(T entity)
         {

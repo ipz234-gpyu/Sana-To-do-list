@@ -7,11 +7,15 @@ namespace ToDoList.Repository.RepositoryModel
         public XmlRepositoryTasks(IConfiguration Configuration) : base(Configuration)
         {
         }
-        public async Task Completed(int Id)
+        public async Task<Tasks> Completed(int Id)
         {
             Tasks task = await GetByIdAsync(Id);
-            task.Completed = !task.Completed;
-            await UpdateAsync(task);
+            if (task != null)
+            {
+                task.Completed = !task.Completed;
+                await UpdateAsync(task);
+            }
+            return task;
         }
     }
 }

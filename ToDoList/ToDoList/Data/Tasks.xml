@@ -1,2 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfTasks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+<ArrayOfTasks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Tasks>
+    <Id>7</Id>
+    <Description>Task 1</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId xsi:nil="true" />
+  </Tasks>
+  <Tasks>
+    <Id>8</Id>
+    <Description>Task 2</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId xsi:nil="true" />
+  </Tasks>
+  <Tasks>
+    <Id>9</Id>
+    <Description>Task 3</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId xsi:nil="true" />
+  </Tasks>
+  <Tasks>
+    <Id>10</Id>
+    <Description>Task 4</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId xsi:nil="true" />
+  </Tasks>
+  <Tasks>
+    <Id>11</Id>
+    <Description>Task</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId xsi:nil="true" />
+  </Tasks>
+  <Tasks>
+    <Id>12</Id>
+    <Description>Task</Description>
+    <Completed>false</Completed>
+    <DeadLine xsi:nil="true" />
+    <CategoryId xsi:nil="true" />
+  </Tasks>
+</ArrayOfTasks>

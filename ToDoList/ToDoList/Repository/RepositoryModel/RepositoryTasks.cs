@@ -4,6 +4,6 @@ namespace ToDoList.Repository.RepositoryModel
 {
     public interface RepositoryTasks : IRepository<Tasks>
     {
-        Task Completed(int Id);
+        Task<Tasks> Completed(int Id);
     }
 }
