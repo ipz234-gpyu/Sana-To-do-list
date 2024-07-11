@@ -10,6 +10,8 @@ using ToDoListAPI.Schema;
 using ToDoListAPI.TypeObject;
 using ToDoList.GraphQL.Middleware;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -60,6 +62,19 @@ builder.Services.AddGraphQL(options =>
     options.AddAutoSchema<ISchema>().AddSystemTextJson();
 });
 
+var provider = builder.Services.BuildServiceProvider();
+
+var configuration = provider.GetRequiredService<IConfiguration>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,6 +84,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseCors();
 
 app.UseMiddleware<RepositoryMiddleware>();
 

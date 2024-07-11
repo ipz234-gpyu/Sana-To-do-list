@@ -39,7 +39,7 @@ namespace ToDoListAPI.Mutation
             {
                 var taskId = context.GetArgument<int>("id");
                 await repositoryFactory.GetRepositoryTasks().DeleteAsync(taskId);
-                return $"Task with id {taskId} has been deleted";
+                return $"{taskId}";
             });
 
             Field<TaskType>("completed").Arguments(new QueryArguments(new QueryArgument<IdGraphType>

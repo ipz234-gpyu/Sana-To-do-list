@@ -97,7 +97,7 @@
                         <td>
                             @if (item.CategoryId != null)
                             {
-                                var category = @Model.Categories?.FirstOrDefault(category => category.Id == item.CategoryId, null);
+                                var category = @Model.Categories?.FirstOrDefault(category => category?.Id == item.CategoryId, null);
                                 <span>@category?.Name</span>
                             }
                         </td>

@@ -37,9 +37,9 @@ namespace ToDoListAPI.Mutation
                 Name = "id"
             })).ResolveAsync(async context =>
             {
-                var taskId = context.GetArgument<int>("id");
-                await repositoryFactory.GetRepository<Category>().DeleteAsync(taskId);
-                return $"Task with id {taskId} has been deleted";
+                var categoryId = context.GetArgument<int>("id");
+                await repositoryFactory.GetRepository<Category>().DeleteAsync(categoryId);
+                return $"{categoryId}";
             });
         }
     }
